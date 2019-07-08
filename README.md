@@ -38,31 +38,45 @@ cd ../
 
 ### Run ingestors
 ```
-cortex/cortex -config.file=./docs/single-process-config.yaml -distributor.ingestion-rate-limit=0 # might need to specify ingester.lifecycler.interface=netInerfaceName
+cortex/cortex -config.file=./docs/single-process-config.yaml -distributor.ingestion-rate-limit=0 # might need to specify -ingester.lifecycler.interface=netInerfaceName
 thanos/thanos receive
 VictoriaMetrics/victoria-metrics
 ```
 
 ### Send metrics to ingestors
 ```
-#Cortex 
+# Cortex
 export URL=http://127.0.0.1:9009/api/prom/push
 
+# Short test.
 avalanche/avalanche \
 --remote-url=$URL \
 --metric-count=100 \
 --label-count=10 \
 --series-count=100 \
 --remote-samples-count=1000 \
---value-interval=10
+--value-interval=10 \
+$PPROF_URLS
+
+# Long test (continious pprof readings).
+avalanche/avalanche \
+--remote-url=$URL \
+--metric-count=100 \
+--label-count=10 \
+--series-count=100 \
+--remote-samples-count=50000 \
+--value-interval=10 \
+--remote-pprof-interval=60s \
+$PPROF_URLS
 
 # Thanos
 export URL=http://127.0.0.1:19291/api/v1/receive
+export PPROF_URLS="--remote-pprof-urls=http://127.0.0.1:10902/debug/pprof/heap --remote-pprof-urls=http://127.0.0.1:10902/debug/pprof/profile"
 # Same command as above.
 
 # VM
 export URL=http://127.0.0.1:8428/api/v1/write 
+export PPROF_URLS="--remote-pprof-urls=http://127.0.0.1:8428/debug/pprof/heap --remote-pprof-urls=http://127.0.0.1:8428/debug/pprof/profile"
 # Same command as above.
-
 
 ```
