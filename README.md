@@ -36,9 +36,10 @@ Optional:
 ```
 # Cortex
 export URL=http://127.0.0.1:9009/api/prom/push
+export SENDER=avalancheCortex
 
 # Short test
-docker run -d --net=host --name=avalanche krasimir/avalanche \
+docker run -d --net=host --name=$SENDER krasimir/avalanche \
 --remote-url=$URL \
 --metric-count=100 \
 --label-count=10 \
@@ -47,7 +48,7 @@ docker run -d --net=host --name=avalanche krasimir/avalanche \
 --value-interval=10
 
 # Long test
-docker run -d --net=host --name=avalanche krasimir/avalanche \
+docker run -d --net=host --name=$SENDER krasimir/avalanche \
 --remote-url=$URL \
 --metric-count=100 \
 --label-count=10 \
@@ -57,10 +58,14 @@ docker run -d --net=host --name=avalanche krasimir/avalanche \
 
 # Thanos
 export URL=http://127.0.0.1:19291/api/v1/receive
+export SENDER=avalancheThanos
+
 # Same command as above.
 
 # VM
 export URL=http://127.0.0.1:8428/api/v1/write 
+export SENDER=avalancheVM
+
 # Same command as above.
 ```
 
