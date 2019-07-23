@@ -39,7 +39,7 @@ export URL=http://127.0.0.1:9009/api/prom/push
 export SENDER=avalancheCortex
 
 # Short test
-docker run -d --net=host --name=$SENDER krasimir/avalanche \
+docker run -d --net=host --name=$SENDER quay.io/freshtracks.io/avalanche \
 --remote-url=$URL \
 --metric-count=100 \
 --label-count=10 \
@@ -48,7 +48,7 @@ docker run -d --net=host --name=$SENDER krasimir/avalanche \
 --value-interval=10
 
 # Long test
-docker run -d --net=host --name=$SENDER krasimir/avalanche \
+docker run -d --net=host --name=$SENDER quay.io/freshtracks.io/avalanche \
 --remote-url=$URL \
 --metric-count=100 \
 --label-count=10 \
