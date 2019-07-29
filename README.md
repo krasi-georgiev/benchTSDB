@@ -4,7 +4,7 @@
 ```
 docker run -d --net=host --name=cortex -v $(pwd)/config/cortex.yml:/etc/cortex.yml  quay.io/cortexproject/cortex:master-1b36b439 -config.file=/etc/cortex.yml -distributor.ingestion-rate-limit=0 # might need to specify -ingester.lifecycler.interface=netInerfaceName
 
-docker run -d --net=host --name=thanos improbable/thanos:master-2019-07-09-18049ff3 receive
+docker run -d --net=host --name=thanosIngest improbable/thanos:master-2019-07-09-18049ff3 receive
 
 docker run -d --net=host --name=vm victoriametrics/victoria-metrics
 ```
@@ -44,7 +44,7 @@ docker run -d --net=host --name=$SENDER quay.io/freshtracks.io/avalanche \
 --metric-count=100 \
 --label-count=10 \
 --series-count=100 \
---remote-samples-count=1000 \
+--remote-requests-count=1000 \
 --value-interval=10
 
 # Long test
@@ -53,7 +53,7 @@ docker run -d --net=host --name=$SENDER quay.io/freshtracks.io/avalanche \
 --metric-count=100 \
 --label-count=10 \
 --series-count=100 \
---remote-samples-count=1000000 \
+--remote-requests-count=1000000 \
 --value-interval=10
 
 # Thanos
@@ -69,3 +69,15 @@ export SENDER=avalancheVM
 # Same command as above.
 ```
 
+## Quering
+
+Run Thanos querier:
+```
+docker run -d --net=host --name=thanosQuery quay.io/thanos/thanos:master-2019-07-24-f6992f7a query \
+     --store="localhost:10901" \
+     --http-address="0.0.0.0:10903" \
+     --grpc-address="0.0.0.0:10904"
+```
+Add Thanos datasource in Grafana as: `http://localhost:10903`
+
+Add VM datasource in Grafana as: `http://localhost:8428`

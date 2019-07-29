@@ -4,9 +4,12 @@ scrape_configs:
   - job_name: 'vm'
     static_configs:
     - targets: ['localhost:8428']
-  - job_name: 'thanos'
+  - job_name: 'thanosIngest'
     static_configs:
     - targets: ['localhost:10902']
   - job_name: 'cortex'
     static_configs:
     - targets: ['localhost:9009']
+  - job_name: 'thanosQuery'
+    static_configs:
+    - targets: ['localhost:10903']
